@@ -1,25 +1,46 @@
 import React, {Children, Component} from 'react';
-import {Text, View, StyleSheet,ScrollView} from 'react-native';
+import {
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import SearchBar from './common/SearchBar';
 
 import FeaturedNews from './FeaturedNews';
-import SmallCard from './common/SmallCard';
+
 import BreakingNews from './BreakingNews';
-import data from '../FakeData';
 import TechNews from './TechNews';
 import Entertainment from './Entertainment';
 import Political from './Political';
+import {connect} from 'react-redux';
+import {
+  getBreakingNews,
+  getTechNews,
+  getEntertainmentNews,
+  getPoliticalNews,
+  setCurrentTitle,
+  setCurrentData,
+} from '../actions';
 
 class Screen extends Component {
+  componentDidMount() {
+    this.props.getBreakingNews();
+    this.props.getTechNews();
+    this.props.getEntertainmentNews();
+    this.props.getPoliticalNews();
+  }
+
+  callCategoryDetail(heading,category){
+   this.props.setCurrentTitle(heading)
+   this.props.setCurrentData(category)
+   this.props.navigation.navigate("Category")
+  }
   render() {
     const {container} = styles;
-    const breakingNews = data.filter(item => item.category === 'breaking-news');
-    const techNews = data.filter(item => item.category === 'tech');
-    const entertainmentNews = data.filter(item => item.category === 'entertainment');
-    const politicalNews = data.filter(item => item.category === 'political');
     return (
       <ScrollView style={container}>
         <SearchBar />
+       
         <FeaturedNews
           item={{
             id: '1',
@@ -28,10 +49,19 @@ class Screen extends Component {
             thumbnail: 'http://lorempixel.com/400/200/',
           }}
         />
-        <BreakingNews data={breakingNews} />
-        <TechNews data={techNews}/>
-         <Entertainment data={entertainmentNews}/>
-         <Political data={politicalNews}/>
+        <TouchableOpacity
+          onPress={() => this.callCategoryDetail('Breaking News','breaking-news')}>
+          <BreakingNews data={this.props.breakingNews} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => this.callCategoryDetail('Tech News','tech')}>
+        <TechNews data={this.props.techNews} />
+        </TouchableOpacity>
+        <TouchableOpacity  onPress={() => this.callCategoryDetail('Entertainment News','entertainment')}>
+        <Entertainment data={this.props.entertainmentNews} />
+        </TouchableOpacity>
+        <TouchableOpacity  onPress={() => this.callCategoryDetail('Political News','political')}>
+        <Political data={this.props.politicalNews} />
+        </TouchableOpacity>
       </ScrollView>
     );
   }
@@ -45,4 +75,25 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Screen;
+const mapStateToProps = state => {
+  return {
+    breakingNews: state.reducerListing.breakingNews,
+    techNews: state.reducerListing.techNews,
+    entertainmentNews: state.reducerListing.entertainmentNews,
+    politicalNews: state.reducerListing.politicalNews,
+    filtered_article_List:state.reducerListing.filtered_article_List,
+    search:state.reducerListing.search
+  
+
+  };
+};
+
+export default connect(mapStateToProps, {
+  getBreakingNews,
+  getTechNews,
+  getEntertainmentNews,
+  getPoliticalNews,
+  setCurrentTitle,
+  setCurrentData,
+  
+})(Screen);
