@@ -10,6 +10,7 @@ import {
   SEARCH_BAR_CHANGED,
   FILTER_ARTICLE_LIST,
   SET_CURRENT_ARTICLE,
+  MODAL_VISIBLE,
 } from '../actions/ActionTypes';
 
 const INITIAL_STATE = {
@@ -24,11 +25,13 @@ const INITIAL_STATE = {
   search:'',
   filtered_article_List:[],
   currentArticle:[],
+  modal_visible:false,
 };
 
 export default (state = INITIAL_STATE, action) => {
   // console.log(action)
   // console.log(action)
+  
   switch (action.type) {
     case USERNAME_CHANGED:
       return {...state, username: action.payload};
@@ -52,6 +55,8 @@ export default (state = INITIAL_STATE, action) => {
       return{...state,filtered_article_List:action.payload}
     case SET_CURRENT_ARTICLE:
       return{...state,currentArticle:action.payload}
+    case MODAL_VISIBLE:
+      return{...state,modal_visible:action.payload}
     default:
       return {...state};
   }

@@ -5,9 +5,9 @@ import HorizontalList from './HorizontalList'
 
  class Entertainment extends Component {
     render() {
-        const {data}=this.props
+        const {data,nav}=this.props
         return (
-          <HorizontalList title=' Entertainment News' data={data}/>
+          <HorizontalList title=' Entertainment News' data={data} nav={nav}/>
         )
     }
 }

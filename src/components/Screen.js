@@ -1,8 +1,10 @@
 import React, {Children, Component} from 'react';
 import {
+  View,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  Modal,
 } from 'react-native';
 import SearchBar from './common/SearchBar';
 
@@ -12,6 +14,7 @@ import BreakingNews from './BreakingNews';
 import TechNews from './TechNews';
 import Entertainment from './Entertainment';
 import Political from './Political';
+import SearchList from './common/SearchList';
 import {connect} from 'react-redux';
 import {
   getBreakingNews,
@@ -20,7 +23,9 @@ import {
   getPoliticalNews,
   setCurrentTitle,
   setCurrentData,
+  searchBarValueChanged,
 } from '../actions';
+
 
 class Screen extends Component {
   componentDidMount() {
@@ -35,11 +40,32 @@ class Screen extends Component {
    this.props.setCurrentData(category)
    this.props.navigation.navigate("Category")
   }
+  
+  
   render() {
-    const {container} = styles;
+    const {container,searchList} = styles;
+   
     return (
-      <ScrollView style={container}>
-        <SearchBar />
+     <View style={container}>
+        
+        <SearchBar />  
+      <ScrollView >
+       
+    
+        <Modal 
+        animationType="slide"
+        transparent={true}
+        visible={this.props.modal_visible}
+        onRequestClose={() => {
+            this.props.searchBarValueChanged('')
+        }}
+
+        >
+     
+          <SearchList nav={this.props.navigation}/>
+    
+       
+        </Modal>
        
         <FeaturedNews
           item={{
@@ -51,18 +77,20 @@ class Screen extends Component {
         />
         <TouchableOpacity
           onPress={() => this.callCategoryDetail('Breaking News','breaking-news')}>
-          <BreakingNews data={this.props.breakingNews} />
+          <BreakingNews data={this.props.breakingNews} nav={this.props.navigation}/>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => this.callCategoryDetail('Tech News','tech')}>
-        <TechNews data={this.props.techNews} />
+        <TechNews data={this.props.techNews} nav={this.props.navigation} />
         </TouchableOpacity>
         <TouchableOpacity  onPress={() => this.callCategoryDetail('Entertainment News','entertainment')}>
-        <Entertainment data={this.props.entertainmentNews} />
+        <Entertainment data={this.props.entertainmentNews} nav={this.props.navigation}/>
         </TouchableOpacity>
         <TouchableOpacity  onPress={() => this.callCategoryDetail('Political News','political')}>
-        <Political data={this.props.politicalNews} />
+        <Political data={this.props.politicalNews} nav={this.props.navigation} />
         </TouchableOpacity>
       </ScrollView>
+      </View>
+    
     );
   }
 }
@@ -73,6 +101,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#e8dca0',
     flex: 1,
   },
+  searchList:{
+    marginTop:200,
+  }
 });
 
 const mapStateToProps = state => {
@@ -82,7 +113,8 @@ const mapStateToProps = state => {
     entertainmentNews: state.reducerListing.entertainmentNews,
     politicalNews: state.reducerListing.politicalNews,
     filtered_article_List:state.reducerListing.filtered_article_List,
-    search:state.reducerListing.search
+    search:state.reducerListing.search,
+    modal_visible:state.reducerListing.modal_visible
   
 
   };
@@ -95,5 +127,6 @@ export default connect(mapStateToProps, {
   getPoliticalNews,
   setCurrentTitle,
   setCurrentData,
+  searchBarValueChanged,
   
 })(Screen);

@@ -4,9 +4,9 @@ import HorizontalList from './HorizontalList'
 
  class BreakingNews extends Component {
     render() {
-        const {data,}=this.props
+        const {data,nav}=this.props
         return (
-          <HorizontalList title='Breaking News' data={data}/>
+          <HorizontalList title='Breaking News' nav={nav}data={data}/>
         )
     }
 }

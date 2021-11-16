@@ -10,6 +10,7 @@ import {
   FILTER_ARTICLE_LIST,
   SEARCH_BAR_CHANGED,
   SET_CURRENT_ARTICLE,
+  MODAL_VISIBLE,
 } from './ActionTypes';
 import data from '../FakeData';
 
@@ -76,6 +77,13 @@ export const searchBarValueChanged = search => {
       item.title.includes(search, 0)
     );
 
+    var modal_visible=false
+    if(search=='' ){
+      modal_visible=false
+    }else{
+      modal_visible=true
+    }
+
     dispatch({
       type: SEARCH_BAR_CHANGED,
       payload: search,
@@ -84,7 +92,13 @@ export const searchBarValueChanged = search => {
     dispatch({
       type: FILTER_ARTICLE_LIST,
       payload: filtered_articleList,
+    
     });
+
+    dispatch({
+      type:MODAL_VISIBLE,
+      payload:modal_visible,
+    })
   };
 };
 

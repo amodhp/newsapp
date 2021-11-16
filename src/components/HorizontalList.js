@@ -1,3 +1,4 @@
+import { connect } from 'react-redux';
 import React, {Component} from 'react';
 import {
   FlatList,
@@ -10,13 +11,18 @@ import {
 import CategoryDetail from './common/CategoryDetail';
 import SmallCard from './common/SmallCard';
 import Title from './common/Title';
+import { setCurrentArticle } from '../actions';
+
 
 class HorizontalList extends Component {
-
+  smallCardDetail=(id,nav)=>{
+   this.props.setCurrentArticle(id)
+   nav.navigate("Article")
+  }
 
   render() {
     const {list} = styles;
-    const {data, title} = this.props;
+    const {data, title,nav} = this.props;
     return (
       <>
         <Title size={20}>{title}</Title>
@@ -28,7 +34,7 @@ class HorizontalList extends Component {
             horizontal
             showsHorizontalScrollIndicator={false}
             renderItem={({item}) => (
-              <TouchableOpacity>
+              <TouchableOpacity onPress={()=>this.smallCardDetail(item.id,nav)} >
                 <SmallCard item={item} />
               </TouchableOpacity>
             )}
@@ -45,4 +51,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HorizontalList;
+export default connect(null,{setCurrentArticle}) (HorizontalList);

@@ -4,6 +4,12 @@ import { StyleSheet, Text, View } from 'react-native'
 
 
  class SplashScreen extends Component {
+
+    componentDidMount() {
+        setTimeout(() => {
+            this.props.navigation.navigate("Login")
+        }, 3000)
+    }
     render() {
         const{textStyle,container,screen,subtextStyle}=styles
         return (
@@ -12,8 +18,8 @@ import { StyleSheet, Text, View } from 'react-native'
              <Text style={textStyle}>News App</Text>
              <Text style={subtextStyle}>Latest articles on all topics!</Text>
              </View>
-             
-          
+           
+              
             </View>
 
         
